@@ -3,787 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tarot Místico</title>
+    <title>Tarot Místico - Experiência Imersiva</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Cinzel', 'Georgia', serif;
-        }
-        
-        body {
-            background: radial-gradient(circle at center, #0c0c1f 0%, #050510 100%);
-            color: #e6e6ff;
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
-            position: relative;
-        }
-        
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(123, 31, 162, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(33, 150, 243, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 80%, rgba(233, 30, 99, 0.1) 0%, transparent 50%);
-            z-index: -1;
-        }
-        
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-        
-        .star {
-            position: absolute;
-            background-color: white;
-            border-radius: 50%;
-            animation: twinkle 5s infinite;
-        }
-        
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 1; }
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            width: 100%;
-            max-width: 800px;
-            position: relative;
-        }
-        
-        .title-container {
-            position: relative;
-            padding: 20px;
-        }
-        
-        h1 {
-            font-size: 3.5rem;
-            margin-bottom: 10px;
-            color: #f3e5f5;
-            text-shadow: 0 0 15px rgba(186, 104, 200, 0.7);
-            letter-spacing: 3px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .title-glow {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(ellipse at center, rgba(156, 39, 176, 0.4) 0%, transparent 70%);
-            filter: blur(20px);
-            z-index: 0;
-        }
-        
-        .subtitle {
-            font-size: 1.3rem;
-            color: #b39ddb;
-            margin-bottom: 20px;
-            font-style: italic;
-        }
-        
-        .instructions {
-            background-color: rgba(13, 13, 37, 0.7);
-            padding: 15px 25px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            text-align: center;
-            max-width: 600px;
-            border: 1px solid rgba(123, 31, 162, 0.5);
-            box-shadow: 0 0 20px rgba(123, 31, 162, 0.3);
-            backdrop-filter: blur(5px);
-        }
-        
-        .controls {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
-        button {
-            background: linear-gradient(135deg, #7b1fa2 0%, #4a148c 100%);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 1.1rem;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: 0.5s;
-        }
-        
-        button:hover::before {
-            left: 100%;
-        }
-        
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(123, 31, 162, 0.5);
-        }
-        
-        button:disabled {
-            background: #333;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        button:disabled:hover::before {
-            left: -100%;
-        }
-        
-        .music-control {
-            background: transparent;
-            border: 1px solid #7b1fa2;
-            color: #b39ddb;
-            padding: 10px 15px;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .tarot-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 25px;
-            margin-bottom: 30px;
-            max-width: 1200px;
-            perspective: 1000px;
-        }
-        
-        .card {
-            width: 180px;
-            height: 300px;
-            perspective: 1000px;
-            cursor: pointer;
-            position: relative;
-        }
-        
-        .card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.8s;
-            transform-style: preserve-3d;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border-radius: 15px;
-        }
-        
-        .card.flipped .card-inner {
-            transform: rotateY(180deg);
-        }
-        
-        .card-front, .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 15px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-        
-        .card-front {
-            background: linear-gradient(135deg, #4a148c 0%, #7b1fa2 100%);
-            color: white;
-            font-size: 1.5rem;
-            border: 2px solid #ab47bc;
-            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
-        }
-        
-        .card-front::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M50,10 L60,40 L90,40 L65,60 L75,90 L50,70 L25,90 L35,60 L10,40 L40,40 Z" fill="rgba(255,255,255,0.1)"/></svg>');
-            background-size: 80px;
-            opacity: 0.3;
-        }
-        
-        .card-back {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            transform: rotateY(180deg);
-            padding: 20px;
-            text-align: center;
-            border: 2px solid #533483;
-            position: relative;
-        }
-        
-        .card-back::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" stroke="rgba(171,71,188,0.2)" stroke-width="2" fill="none"/><circle cx="50" cy="50" r="30" stroke="rgba(171,71,188,0.2)" stroke-width="1" fill="none"/><circle cx="50" cy="50" r="20" stroke="rgba(171,71,188,0.2)" stroke-width="1" fill="none"/></svg>');
-            background-size: 100%;
-            opacity: 0.5;
-        }
-        
-        .card-name {
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #e1bee7;
-            text-shadow: 0 0 10px rgba(186, 104, 200, 0.7);
-            position: relative;
-            z-index: 1;
-        }
-        
-        .card-meaning {
-            font-size: 0.95rem;
-            color: #f3e5f5;
-            line-height: 1.4;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .card-glow {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(171, 71, 188, 0.5);
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-        }
-        
-        .card:hover .card-glow {
-            opacity: 1;
-        }
-        
-        .selected-cards {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-            max-width: 800px;
-        }
-        
-        .selected-card {
-            width: 150px;
-            height: 250px;
-            perspective: 1000px;
-        }
-        
-        .selected-card .card-inner {
-            width: 100%;
-            height: 100%;
-        }
-        
-        .reading-result {
-            margin-top: 40px;
-            padding: 30px;
-            background-color: rgba(13, 13, 37, 0.8);
-            border-radius: 20px;
-            max-width: 900px;
-            text-align: center;
-            border: 1px solid rgba(123, 31, 162, 0.5);
-            box-shadow: 0 0 30px rgba(123, 31, 162, 0.3);
-            backdrop-filter: blur(10px);
-            display: none;
-            animation: fadeIn 1s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .reading-title {
-            font-size: 2rem;
-            color: #e1bee7;
-            margin-bottom: 25px;
-            text-shadow: 0 0 10px rgba(186, 104, 200, 0.7);
-        }
-        
-        .card-interpretation {
-            margin-bottom: 25px;
-            padding: 20px;
-            background: linear-gradient(135deg, rgba(123, 31, 162, 0.2) 0%, rgba(74, 20, 140, 0.2) 100%);
-            border-radius: 15px;
-            border-left: 4px solid #ab47bc;
-            text-align: left;
-            transition: transform 0.3s;
-        }
-        
-        .card-interpretation:hover {
-            transform: translateX(10px);
-        }
-        
-        .card-interpretation h3 {
-            color: #e1bee7;
-            margin-bottom: 10px;
-            font-size: 1.4rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .card-interpretation h3 i {
-            color: #ab47bc;
-        }
-        
-        .card-interpretation p {
-            color: #f3e5f5;
-            line-height: 1.6;
-        }
-        
-        .counter {
-            margin-top: 15px;
-            font-size: 1.1rem;
-            color: #b39ddb;
-        }
-        
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .floating {
-            animation: floating 6s ease-in-out infinite;
-        }
-        
-        @keyframes floating {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
-        }
-        
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-            
-            .card {
-                width: 140px;
-                height: 230px;
-            }
-            
-            .selected-card {
-                width: 120px;
-                height: 200px;
-            }
-            
-            .controls {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="stars" id="stars"></div>
-    
-    <header>
-        <div class="title-container">
-            <div class="title-glow"></div>
-            <h1 class="floating">Tarot Místico</h1>
-        </div>
-        <p class="subtitle">Descubra os segredos que as cartas revelam</p>
-        <div class="instructions">
-            <p>Escolha 3 cartas para receber sua leitura personalizada. Cada carta revelará aspectos do seu passado, presente e futuro.</p>
-        </div>
-        
-        <div class="controls">
-            <button id="revealButton" disabled>
-                <i class="fas fa-eye"></i> Revelar Leitura
-            </button>
-            <button id="resetButton">
-                <i class="fas fa-redo"></i> Nova Leitura
-            </button>
-            <button class="music-control" id="musicToggle">
-                <i class="fas fa-volume-up"></i>
-            </button>
-        </div>
-        
-        <div class="counter" id="counter">Cartas selecionadas: <span id="selectedCount">0</span>/3</div>
-    </header>
-    
-    <div class="tarot-container" id="tarotDeck">
-        <!-- Cartas serão geradas via JavaScript -->
+    <!-- LOADING SCREEN -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Preparando a sala mística...</div>
+    </div>
+
+    <!-- CENÁRIO MÍSTICO -->
+    <div class="mystic-room">
+        <canvas id="particlesCanvas"></canvas>
+        <canvas id="candlesCanvas"></canvas>
+        <div class="room-background"></div>
+        <div class="table-surface"></div>
+        <div class="crystal-ball" id="crystalBall"></div>
+        <div class="incense-smoke"></div>
     </div>
     
-    <div class="selected-cards" id="selectedCards">
-        <!-- Cartas selecionadas aparecerão aqui -->
+    <!-- SPOTLIGHT EFFECT -->
+    <div class="spotlight" id="spotlight"></div>
+    
+    <!-- INDICADOR DE VOZ -->
+    <div class="voice-indicator" id="voiceIndicator">
+        <div class="voice-wave">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <span class="voice-indicator-text">A vidente está falando...</span>
     </div>
     
-    <div class="reading-result" id="readingResult">
-        <h2 class="reading-title"><i class="fas fa-crystal-ball"></i> Sua Leitura de Tarot</h2>
-        <div id="interpretations">
-            <!-- Interpretações das cartas aparecerão aqui -->
+    <!-- TELAS DE SESSÃO -->
+    <div class="session-screen" id="welcomeScreen">
+        <div class="session-message" id="welcomeMessage"></div>
+        <button class="btn-primary btn-continue" id="continueFromWelcome" style="display: none;">
+            <i class="fas fa-arrow-right"></i> Continuar
+        </button>
+    </div>
+    
+    <div class="session-screen" id="instructionsScreen">
+        <div class="session-message" id="instructionsMessage"></div>
+        <button class="btn-primary" id="startSelection" style="display: none;">
+            <i class="fas fa-hand-pointer"></i> Estou Pronto
+        </button>
+    </div>
+    
+    <div class="session-screen" id="interpretingScreen">
+        <div class="session-message" id="interpretingMessage"></div>
+        <button class="btn-primary btn-continue" id="continueFromInterpreting" style="display: none;">
+            <i class="fas fa-check"></i> Finalizar
+        </button>
+    </div>
+    
+    <div class="session-screen" id="completeScreen">
+        <div class="session-message" id="completeMessage"></div>
+        <button class="btn-primary" id="newReading">
+            <i class="fas fa-redo"></i> Nova Consulta
+        </button>
+    </div>
+    
+    <!-- TELA DE REVELAÇÃO DE CARTA -->
+    <div class="card-reveal-screen" id="cardRevealScreen">
+        <div class="card-reveal-content">
+            <div class="reveal-position-label" id="revealPosition"></div>
+            <div class="reveal-card-container">
+                <img class="reveal-card-image" id="revealCardImage" src="" alt="Carta de Tarot">
+            </div>
+            <div class="reveal-card-info">
+                <h2 class="reveal-card-name" id="revealCardName"></h2>
+                <p class="reveal-card-meaning" id="revealCardMeaning"></p>
+            </div>
+            <!-- Legendas da fala da vidente -->
+            <div class="reveal-speech-container">
+                <div class="reveal-speech-icon">
+                    <i class="fas fa-comment-dots"></i>
+                </div>
+                <p class="reveal-speech-text" id="revealSpeechText"></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- CONTROLES FIXOS (SEMPRE VISÍVEIS) -->
+    <div class="fixed-controls">
+        <button class="voice-control tooltip" id="voiceToggle" data-tooltip="Ativar/Desativar Voz">
+            <i class="fas fa-volume-up"></i>
+        </button>
+        <button class="music-control tooltip" id="musicToggle" data-tooltip="Ativar/Desativar Música">
+            <i class="fas fa-music"></i>
+        </button>
+        <button class="voice-control tooltip" id="voiceSelector" data-tooltip="Selecionar Voz">
+            <i class="fas fa-microphone"></i>
+        </button>
+    </div>
+    
+    <!-- CONTEÚDO PRINCIPAL -->
+    <div class="main-content">
+        <header id="mainHeader">
+            <div class="title-container">
+                <div class="title-glow"></div>
+                <h1 class="floating">Tarot Místico</h1>
+            </div>
+            <p class="subtitle">Descubra os segredos que as cartas revelam</p>
+            
+            <div class="controls">
+                <button class="btn-primary" id="startSession">
+                    <i class="fas fa-sparkles"></i> Iniciar Sessão
+                </button>
+            </div>
+            
+            <!-- Modal de Seleção de Voz -->
+            <div class="voice-modal" id="voiceModal">
+                <div class="voice-modal-content">
+                    <h3><i class="fas fa-microphone-alt"></i> Selecionar Voz da Vidente</h3>
+                    <p class="voice-modal-subtitle">Escolha a voz que mais lhe agrada</p>
+                    <div class="voice-list" id="voiceList">
+                        <!-- Vozes serão inseridas aqui via JavaScript -->
+                    </div>
+                    <button class="btn-secondary" id="closeVoiceModal">
+                        <i class="fas fa-times"></i> Fechar
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <div class="instructions" id="selectingInstructions" style="display: none;">
+            <p>Escolha 3 cartas para receber sua leitura personalizada...</p>
+            <div class="counter">Cartas selecionadas: <span id="selectedCount">0</span>/3</div>
+        </div>
+        
+        <div class="tarot-container" id="tarotDeck">
+            <!-- Cartas serão geradas via JavaScript -->
+        </div>
+        
+        <div class="selected-cards" id="selectedCards">
+            <!-- Cartas selecionadas aparecerão aqui -->
+        </div>
+        
+        <div class="reading-result" id="readingResult">
+            <h2 class="reading-title"><i class="fas fa-crystal-ball"></i> Sua Leitura de Tarot</h2>
+            <div id="interpretations">
+                <!-- Interpretações das cartas aparecerão aqui -->
+            </div>
         </div>
     </div>
 
     <audio id="backgroundMusic" loop>
-        <source src="https://assets.mixkit.co/music/preview/mixkit-mysterious-space-2812.mp3" type="audio/mpeg">
+        <source src="music/fundo.mp3" type="audio/mpeg">
     </audio>
     
     <audio id="cardFlipSound">
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-magic-spell-389.mp3" type="audio/mpeg">
+        <source src="music/cartaVirando.mp3" type="audio/mpeg">
     </audio>
     
     <audio id="revealSound">
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-magical-wooden-harp-232.mp3" type="audio/mpeg">
+        <source src="music/revelacao.mp3" type="audio/mpeg">
     </audio>
 
-    <script>
-        // Dados das cartas de tarot
-        const tarotCards = [
-            {
-                name: "O Louco",
-                meaning: "Novos começos, espontaneidade, fé no universo. Um convite para seguir sua intuição sem medo do desconhecido."
-            },
-            {
-                name: "O Mago",
-                meaning: "Poder pessoal, habilidade, manifestação. Você tem todas as ferramentas necessárias para criar sua realidade."
-            },
-            {
-                name: "A Sacerdotisa",
-                meaning: "Intuição, mistério, sabedoria interior. Confie em seus instintos e no conhecimento que vem do seu subconsciente."
-            },
-            {
-                name: "A Imperatriz",
-                meaning: "Fertilidade, beleza, abundância. Momento de nutrir seus projetos e conectar-se com a natureza e a criatividade."
-            },
-            {
-                name: "O Imperador",
-                meaning: "Estrutura, autoridade, estabilidade. Estabeleça limites e tome o controle da sua vida com sabedoria."
-            },
-            {
-                name: "O Hierofante",
-                meaning: "Tradição, espiritualidade, conselhos. Busque orientação em sistemas de crenças estabelecidos ou mentores."
-            },
-            {
-                name: "Os Enamorados",
-                meaning: "Amor, harmonia, relacionamentos. Decisões do coração e escolhas que refletem seus valores mais profundos."
-            },
-            {
-                name: "O Carro",
-                meaning: "Determinação, vitória, controle. Avance com confiança em direção aos seus objetivos, superando obstáculos."
-            },
-            {
-                name: "A Força",
-                meaning: "Coragem, paciência, compaixão. Sua força interior é maior do que qualquer desafio que enfrente."
-            },
-            {
-                name: "O Eremita",
-                meaning: "Introspecção, sabedoria, solidão. Momento de buscar respostas dentro de si mesmo através da reflexão."
-            },
-            {
-                name: "A Roda da Fortuna",
-                meaning: "Ciclos, destino, mudança. As circunstâncias estão mudando a seu favor - esteja aberto ao fluxo da vida."
-            },
-            {
-                name: "A Justiça",
-                meaning: "Equilíbrio, verdade, causa e efeito. Suas ações terão consequências - aja com integridade e honestidade."
-            },
-            {
-                name: "O Enforcado",
-                meaning: "Rendição, nova perspectiva, pausa. Às vezes, é preciso parar e ver as coisas de um ângulo diferente."
-            },
-            {
-                name: "A Morte",
-                meaning: "Fim de ciclo, transformação, renovação. Deixe ir o que não serve mais para abrir espaço para o novo."
-            },
-            {
-                name: "A Temperança",
-                meaning: "Moderação, equilíbrio, paciência. Encontre o ponto médio em situações extremas e pratique a autodisciplina."
-            },
-            {
-                name: "O Diabo",
-                meaning: "Escravidão, materialismo, limitações. Examine quais crenças ou hábitos estão te prendendo."
-            },
-            {
-                name: "A Torre",
-                meaning: "Mudança abrupta, revelação, libertação. Estruturas que não são sólidas estão desmoronando para seu crescimento."
-            },
-            {
-                name: "A Estrela",
-                meaning: "Esperança, fé, inspiração. Após um período difícil, a luz está brilhando - mantenha a fé no futuro."
-            },
-            {
-                name: "A Lua",
-                meaning: "Ilusão, ansiedade, subconsciente. Confie em sua intuição para navegar por emoções confusas ou situações incertas."
-            },
-            {
-                name: "O Sol",
-                meaning: "Alegria, sucesso, vitalidade. Um período de felicidade, realização e energia positiva está chegando."
-            },
-            {
-                name: "O Julgamento",
-                meaning: "Renascimento, despertar, chamado interior. É hora de responder a um chamado superior e viver seu propósito."
-            },
-            {
-                name: "O Mundo",
-                meaning: "Conclusão, realização, unidade. Você alcançou um marco importante e está pronto para um novo ciclo."
-            }
-        ];
-
-        // Elementos do DOM
-        const tarotDeck = document.getElementById('tarotDeck');
-        const selectedCardsContainer = document.getElementById('selectedCards');
-        const revealButton = document.getElementById('revealButton');
-        const resetButton = document.getElementById('resetButton');
-        const musicToggle = document.getElementById('musicToggle');
-        const readingResult = document.getElementById('readingResult');
-        const interpretationsContainer = document.getElementById('interpretations');
-        const selectedCount = document.getElementById('selectedCount');
-        const counter = document.getElementById('counter');
-        const starsContainer = document.getElementById('stars');
-        
-        // Elementos de áudio
-        const backgroundMusic = document.getElementById('backgroundMusic');
-        const cardFlipSound = document.getElementById('cardFlipSound');
-        const revealSound = document.getElementById('revealSound');
-
-        // Estado do jogo
-        let selectedCards = [];
-        let revealedCards = [];
-        let isMusicPlaying = false;
-
-        // Inicializar o jogo
-        function initGame() {
-            createStars();
-            
-            // Embaralhar as cartas
-            const shuffledCards = [...tarotCards].sort(() => Math.random() - 0.5);
-            
-            // Criar elementos das cartas
-            shuffledCards.forEach((card, index) => {
-                const cardElement = createCardElement(card, index);
-                tarotDeck.appendChild(cardElement);
-            });
-            
-            // Configurar eventos
-            revealButton.addEventListener('click', revealSelectedCards);
-            resetButton.addEventListener('click', resetGame);
-            musicToggle.addEventListener('click', toggleMusic);
-            
-            // Iniciar música
-            backgroundMusic.volume = 0.3;
-            toggleMusic();
-        }
-
-        // Criar elemento de carta
-        function createCardElement(card, index) {
-            const cardElement = document.createElement('div');
-            cardElement.className = 'card floating';
-            cardElement.dataset.index = index;
-            
-            cardElement.innerHTML = `
-                <div class="card-inner">
-                    <div class="card-front">
-                        <span>Tarot</span>
-                    </div>
-                    <div class="card-back">
-                        <div class="card-name">${card.name}</div>
-                        <div class="card-meaning">${card.meaning}</div>
-                    </div>
-                </div>
-                <div class="card-glow"></div>
-            `;
-            
-            cardElement.addEventListener('click', () => selectCard(cardElement, card));
-            return cardElement;
-        }
-
-        // Selecionar uma carta
-        function selectCard(cardElement, card) {
-            // Verificar se a carta já foi selecionada
-            if (selectedCards.includes(cardElement) || selectedCards.length >= 3) {
-                return;
-            }
-            
-            // Tocar som de virar carta
-            cardFlipSound.currentTime = 0;
-            cardFlipSound.play();
-            
-            // Virar a carta
-            cardElement.classList.add('flipped');
-            
-            // Adicionar à lista de selecionadas
-            selectedCards.push(cardElement);
-            
-            // Criar uma cópia da carta para a área de selecionadas
-            const selectedCardElement = document.createElement('div');
-            selectedCardElement.className = 'selected-card pulse';
-            selectedCardElement.innerHTML = cardElement.innerHTML;
-            selectedCardsContainer.appendChild(selectedCardElement);
-            
-            // Adicionar dados da carta ao array de cartas reveladas
-            revealedCards.push(card);
-            
-            // Atualizar contador
-            selectedCount.textContent = selectedCards.length;
-            
-            // Atualizar estado do botão
-            if (selectedCards.length === 3) {
-                revealButton.disabled = false;
-                counter.classList.add('pulse');
-            }
-        }
-
-        // Revelar as cartas selecionadas
-        function revealSelectedCards() {
-            // Tocar som de revelação
-            revealSound.play();
-            
-            // Mostrar a interpretação
-            showReading();
-            
-            // Desabilitar o botão
-            revealButton.disabled = true;
-            counter.classList.remove('pulse');
-        }
-
-        // Mostrar a leitura
-        function showReading() {
-            // Limpar interpretações anteriores
-            interpretationsContainer.innerHTML = '';
-            
-            // Adicionar interpretações para cada carta
-            revealedCards.forEach((card, index) => {
-                const position = ['Passado', 'Presente', 'Futuro'][index];
-                const icons = ['fas fa-history', 'fas fa-clock', 'fas fa-hourglass-end'];
-                
-                const interpretationElement = document.createElement('div');
-                interpretationElement.className = 'card-interpretation';
-                interpretationElement.innerHTML = `
-                    <h3><i class="${icons[index]}"></i> ${position}: ${card.name}</h3>
-                    <p>${card.meaning}</p>
-                `;
-                
-                interpretationsContainer.appendChild(interpretationElement);
-            });
-            
-            // Mostrar o resultado
-            readingResult.style.display = 'block';
-            
-            // Rolar para o resultado
-            readingResult.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Reiniciar o jogo
-        function resetGame() {
-            // Limpar seleções
-            selectedCards = [];
-            revealedCards = [];
-            
-            // Limpar containers
-            selectedCardsContainer.innerHTML = '';
-            interpretationsContainer.innerHTML = '';
-            readingResult.style.display = 'none';
-            
-            // Resetar cartas
-            const allCards = tarotDeck.querySelectorAll('.card');
-            allCards.forEach(card => {
-                card.classList.remove('flipped');
-            });
-            
-            // Resetar contador e botão
-            selectedCount.textContent = '0';
-            revealButton.disabled = true;
-            counter.classList.remove('pulse');
-            
-            // Embaralhar novamente
-            const cardElements = Array.from(tarotDeck.children);
-            cardElements.sort(() => Math.random() - 0.5);
-            cardElements.forEach(card => tarotDeck.appendChild(card));
-        }
-
-        // Controlar música
-        function toggleMusic() {
-            if (isMusicPlaying) {
-                backgroundMusic.pause();
-                musicToggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
-            } else {
-                backgroundMusic.play();
-                musicToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
-            }
-            isMusicPlaying = !isMusicPlaying;
-        }
-
-        // Criar estrelas de fundo
-        function createStars() {
-            for (let i = 0; i < 150; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                
-                const size = Math.random() * 3;
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
-                
-                star.style.left = `${Math.random() * 100}%`;
-                star.style.top = `${Math.random() * 100}%`;
-                
-                star.style.animationDelay = `${Math.random() * 5}s`;
-                
-                starsContainer.appendChild(star);
-            }
-        }
-
-        // Iniciar o jogo quando a página carregar
-        window.addEventListener('DOMContentLoaded', initGame);
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
