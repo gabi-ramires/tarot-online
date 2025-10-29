@@ -209,12 +209,14 @@ body {
     z-index: 100;
     background: rgba(0, 0, 0, 0.95);
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
-    transition: opacity 1s ease;
+    transition: opacity 1s ease, visibility 1s ease;
 }
 
 .session-screen.active {
     opacity: 1;
+    visibility: visible;
     pointer-events: all;
 }
 
@@ -840,21 +842,24 @@ button:disabled:hover::before {
 .reading-result {
     margin-top: 40px;
     padding: 30px;
-    background-color: rgba(13, 13, 37, 0.8);
+    background-color: rgba(13, 13, 37, 0.95);
     border-radius: 20px;
     max-width: 900px;
     text-align: center;
-    border: 1px solid rgba(123, 31, 162, 0.5);
-    box-shadow: 0 0 30px rgba(123, 31, 162, 0.3);
-    backdrop-filter: blur(10px);
+    border: 2px solid rgba(123, 31, 162, 0.6);
+    box-shadow: 0 0 40px rgba(123, 31, 162, 0.5);
+    backdrop-filter: blur(15px);
     visibility: hidden;
     opacity: 0;
-    animation: fadeIn 1s ease;
+    transition: opacity 1s ease, visibility 1s ease;
+    position: relative;
+    z-index: 50;
 }
 
 .reading-result.visible {
     visibility: visible;
     opacity: 1;
+    animation: fadeIn 1s ease;
 }
 
 @keyframes fadeIn {
@@ -867,6 +872,16 @@ button:disabled:hover::before {
     color: #e1bee7;
     margin-bottom: 25px;
     text-shadow: 0 0 10px rgba(186, 104, 200, 0.7);
+}
+
+.reading-actions {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(123, 31, 162, 0.3);
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    animation: fadeIn 1s ease 0.5s both;
 }
 
 .card-interpretation {
@@ -1478,12 +1493,14 @@ button:disabled:hover::before {
     align-items: center;
     z-index: 500;
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
 .card-reveal-screen.active {
     opacity: 1;
+    visibility: visible;
     pointer-events: all;
 }
 
@@ -1636,10 +1653,19 @@ button:disabled:hover::before {
         0 0 30px rgba(186, 104, 200, 0.4),
         inset 0 0 20px rgba(123, 31, 162, 0.2);
     backdrop-filter: blur(10px);
-    animation: speechBoxFadeIn 0.5s ease-out;
     display: flex;
     align-items: center;
     gap: 15px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Mostrar caixa apenas quando tela de revelação estiver ativa */
+.card-reveal-screen.active .reveal-speech-container {
+    opacity: 1;
+    visibility: visible;
+    animation: speechBoxFadeIn 0.5s ease-out;
 }
 
 @keyframes speechBoxFadeIn {

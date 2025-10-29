@@ -519,6 +519,7 @@ class TarotSession {
         this.currentRevealIndex = 0;
         
         this.isMusicPlaying = false;
+        this.textAnimationInterval = null;
         
         this.initDOM();
         this.initEventListeners();
@@ -737,12 +738,13 @@ class TarotSession {
         this.elements.completeMessage.textContent = VIDENTE_SPEECHES.closing;
         this.elements.completeScreen.classList.add('active');
         
-        this.voice.speak(VIDENTE_SPEECHES.closing);
-        
-        // Mostrar resultado final
-        setTimeout(() => {
-            this.showFinalReading();
-        }, 2000);
+        this.voice.speak(VIDENTE_SPEECHES.closing, () => {
+            // Após fala, esconder a tela de encerramento e mostrar resultado
+            setTimeout(() => {
+                this.elements.completeScreen.classList.remove('active');
+                this.showFinalReading();
+            }, 1000);
+        });
     }
     
     // ========================================
@@ -838,16 +840,22 @@ class TarotSession {
     }
     
     animateText(element, text, delay = 50) {
+        // Limpar qualquer intervalo anterior
+        if (this.textAnimationInterval) {
+            clearInterval(this.textAnimationInterval);
+        }
+        
         element.textContent = '';
         const words = text.split(' ');
         let currentIndex = 0;
         
-        const interval = setInterval(() => {
+        this.textAnimationInterval = setInterval(() => {
             if (currentIndex < words.length) {
                 element.textContent += (currentIndex > 0 ? ' ' : '') + words[currentIndex];
                 currentIndex++;
             } else {
-                clearInterval(interval);
+                clearInterval(this.textAnimationInterval);
+                this.textAnimationInterval = null;
             }
         }, delay);
     }
@@ -857,9 +865,16 @@ class TarotSession {
     // ========================================
     
     showFinalReading() {
-        this.elements.completeScreen.style.pointerEvents = 'none';
-        this.elements.completeScreen.style.opacity = '0.3';
+        // Esconder todos os elementos de tela
+        this.elements.tarotDeck.style.opacity = '0';
+        this.elements.selectingInstructions.style.display = 'none';
+        this.elements.selectedCardsContainer.innerHTML = '';
         
+        // Mostrar header novamente
+        this.elements.mainHeader.classList.remove('hidden');
+        this.elements.crystalBall.classList.remove('visible');
+        
+        // Limpar e preencher interpretações
         this.elements.interpretations.innerHTML = '';
         
         this.revealedCards.forEach((card, index) => {
@@ -881,8 +896,11 @@ class TarotSession {
             this.elements.interpretations.appendChild(interpretationElement);
         });
         
-        this.elements.readingResult.classList.add('visible');
-        this.elements.readingResult.scrollIntoView({ behavior: 'smooth' });
+        // Mostrar resultado com animação
+        setTimeout(() => {
+            this.elements.readingResult.classList.add('visible');
+            this.elements.readingResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 300);
     }
     
     // ========================================
@@ -892,6 +910,12 @@ class TarotSession {
     resetSession() {
         // Parar voz
         this.voice.stop();
+        
+        // Limpar animações de texto
+        if (this.textAnimationInterval) {
+            clearInterval(this.textAnimationInterval);
+            this.textAnimationInterval = null;
+        }
         
         // Limpar seleções
         this.selectedCards = [];
@@ -903,6 +927,7 @@ class TarotSession {
         this.elements.instructionsScreen.classList.remove('active');
         this.elements.interpretingScreen.classList.remove('active');
         this.elements.completeScreen.classList.remove('active');
+        this.elements.cardRevealScreen.classList.remove('active');
         
         // Esconder elementos
         this.elements.continueFromWelcome.style.display = 'none';
@@ -912,9 +937,9 @@ class TarotSession {
         this.elements.readingResult.classList.remove('visible');
         this.elements.crystalBall.classList.remove('visible');
         
-        // Resetar opacidade
-        this.elements.completeScreen.style.pointerEvents = 'all';
-        this.elements.completeScreen.style.opacity = '1';
+        // Resetar estilos inline
+        this.elements.completeScreen.style.removeProperty('pointer-events');
+        this.elements.completeScreen.style.removeProperty('opacity');
         
         // Limpar containers
         this.elements.selectedCardsContainer.innerHTML = '';
@@ -923,14 +948,14 @@ class TarotSession {
         // Resetar cartas
         document.querySelectorAll('.card').forEach(card => {
             card.classList.remove('flipped', 'selected', 'revealing', 'focused', 'selectable');
-            card.style.pointerEvents = 'auto';
+            card.style.removeProperty('pointer-events');
         });
         
         // Resetar contador
         this.elements.selectedCount.textContent = '0';
         
         // Resetar deck
-        this.elements.tarotDeck.style.opacity = '0';
+        this.elements.tarotDeck.style.removeProperty('opacity');
         this.elements.tarotDeck.classList.remove('visible');
         
         // Embaralhar
