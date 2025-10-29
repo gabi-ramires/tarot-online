@@ -3,23 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jogo de Tarot</title>
+    <title>Tarot Místico</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Georgia', serif;
+            font-family: 'Cinzel', 'Georgia', serif;
         }
         
         body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #f1f1f1;
+            background: radial-gradient(circle at center, #0c0c1f 0%, #050510 100%);
+            color: #e6e6ff;
             min-height: 100vh;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(123, 31, 162, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(33, 150, 243, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(233, 30, 99, 0.1) 0%, transparent 50%);
+            z-index: -1;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 5s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
         }
         
         header {
@@ -28,44 +66,140 @@
             padding: 20px;
             width: 100%;
             max-width: 800px;
+            position: relative;
+        }
+        
+        .title-container {
+            position: relative;
+            padding: 20px;
         }
         
         h1 {
-            font-size: 2.5rem;
+            font-size: 3.5rem;
             margin-bottom: 10px;
-            color: #e94560;
-            text-shadow: 0 0 10px rgba(233, 69, 96, 0.5);
+            color: #f3e5f5;
+            text-shadow: 0 0 15px rgba(186, 104, 200, 0.7);
+            letter-spacing: 3px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .title-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(156, 39, 176, 0.4) 0%, transparent 70%);
+            filter: blur(20px);
+            z-index: 0;
         }
         
         .subtitle {
-            font-size: 1.2rem;
-            color: #a9a9b3;
+            font-size: 1.3rem;
+            color: #b39ddb;
             margin-bottom: 20px;
+            font-style: italic;
         }
         
         .instructions {
-            background-color: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            border-radius: 10px;
+            background-color: rgba(13, 13, 37, 0.7);
+            padding: 15px 25px;
+            border-radius: 15px;
             margin-bottom: 20px;
             text-align: center;
             max-width: 600px;
+            border: 1px solid rgba(123, 31, 162, 0.5);
+            box-shadow: 0 0 20px rgba(123, 31, 162, 0.3);
+            backdrop-filter: blur(5px);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #7b1fa2 0%, #4a148c 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        button:hover::before {
+            left: 100%;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(123, 31, 162, 0.5);
+        }
+        
+        button:disabled {
+            background: #333;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        button:disabled:hover::before {
+            left: -100%;
+        }
+        
+        .music-control {
+            background: transparent;
+            border: 1px solid #7b1fa2;
+            color: #b39ddb;
+            padding: 10px 15px;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .tarot-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 20px;
+            gap: 25px;
             margin-bottom: 30px;
-            max-width: 1000px;
+            max-width: 1200px;
+            perspective: 1000px;
         }
         
         .card {
-            width: 150px;
-            height: 250px;
+            width: 180px;
+            height: 300px;
             perspective: 1000px;
             cursor: pointer;
+            position: relative;
         }
         
         .card-inner {
@@ -74,6 +208,8 @@
             height: 100%;
             transition: transform 0.8s;
             transform-style: preserve-3d;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
         }
         
         .card.flipped .card-inner {
@@ -85,52 +221,102 @@
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: 10px;
+            border-radius: 15px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
         }
         
         .card-front {
-            background: linear-gradient(135deg, #e94560 0%, #0f3460 100%);
+            background: linear-gradient(135deg, #4a148c 0%, #7b1fa2 100%);
             color: white;
             font-size: 1.5rem;
-            border: 2px solid #e94560;
+            border: 2px solid #ab47bc;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .card-front::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M50,10 L60,40 L90,40 L65,60 L75,90 L50,70 L25,90 L35,60 L10,40 L40,40 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: 80px;
+            opacity: 0.3;
         }
         
         .card-back {
-            background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             transform: rotateY(180deg);
-            padding: 15px;
+            padding: 20px;
             text-align: center;
             border: 2px solid #533483;
+            position: relative;
+        }
+        
+        .card-back::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" stroke="rgba(171,71,188,0.2)" stroke-width="2" fill="none"/><circle cx="50" cy="50" r="30" stroke="rgba(171,71,188,0.2)" stroke-width="1" fill="none"/><circle cx="50" cy="50" r="20" stroke="rgba(171,71,188,0.2)" stroke-width="1" fill="none"/></svg>');
+            background-size: 100%;
+            opacity: 0.5;
         }
         
         .card-name {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: bold;
-            margin-bottom: 10px;
-            color: #e94560;
+            margin-bottom: 15px;
+            color: #e1bee7;
+            text-shadow: 0 0 10px rgba(186, 104, 200, 0.7);
+            position: relative;
+            z-index: 1;
         }
         
         .card-meaning {
-            font-size: 0.9rem;
-            color: #f1f1f1;
+            font-size: 0.95rem;
+            color: #f3e5f5;
+            line-height: 1.4;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .card-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(171, 71, 188, 0.5);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        
+        .card:hover .card-glow {
+            opacity: 1;
         }
         
         .selected-cards {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
+            gap: 25px;
+            margin-top: 30px;
             flex-wrap: wrap;
+            max-width: 800px;
         }
         
         .selected-card {
-            width: 120px;
-            height: 200px;
+            width: 150px;
+            height: 250px;
             perspective: 1000px;
         }
         
@@ -139,83 +325,138 @@
             height: 100%;
         }
         
-        button {
-            background: linear-gradient(135deg, #e94560 0%, #0f3460 100%);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 1.1rem;
-            border-radius: 30px;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-        }
-        
-        button:disabled {
-            background: #555;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
         .reading-result {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            max-width: 800px;
+            margin-top: 40px;
+            padding: 30px;
+            background-color: rgba(13, 13, 37, 0.8);
+            border-radius: 20px;
+            max-width: 900px;
             text-align: center;
+            border: 1px solid rgba(123, 31, 162, 0.5);
+            box-shadow: 0 0 30px rgba(123, 31, 162, 0.3);
+            backdrop-filter: blur(10px);
             display: none;
+            animation: fadeIn 1s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .reading-title {
-            font-size: 1.5rem;
-            color: #e94560;
-            margin-bottom: 15px;
+            font-size: 2rem;
+            color: #e1bee7;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px rgba(186, 104, 200, 0.7);
         }
         
         .card-interpretation {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: rgba(83, 52, 131, 0.3);
-            border-radius: 8px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(123, 31, 162, 0.2) 0%, rgba(74, 20, 140, 0.2) 100%);
+            border-radius: 15px;
+            border-left: 4px solid #ab47bc;
+            text-align: left;
+            transition: transform 0.3s;
+        }
+        
+        .card-interpretation:hover {
+            transform: translateX(10px);
         }
         
         .card-interpretation h3 {
-            color: #e94560;
+            color: #e1bee7;
             margin-bottom: 10px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-interpretation h3 i {
+            color: #ab47bc;
+        }
+        
+        .card-interpretation p {
+            color: #f3e5f5;
+            line-height: 1.6;
+        }
+        
+        .counter {
+            margin-top: 15px;
+            font-size: 1.1rem;
+            color: #b39ddb;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
         }
         
         @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
             .card {
+                width: 140px;
+                height: 230px;
+            }
+            
+            .selected-card {
                 width: 120px;
                 height: 200px;
             }
             
-            .selected-card {
-                width: 100px;
-                height: 170px;
-            }
-            
-            h1 {
-                font-size: 2rem;
+            .controls {
+                flex-direction: column;
+                align-items: center;
             }
         }
     </style>
 </head>
 <body>
+    <div class="stars" id="stars"></div>
+    
     <header>
-        <h1>Jogo de Tarot</h1>
-        <p class="subtitle">Escolha 3 cartas para revelar seu destino</p>
-        <div class="instructions">
-            <p>Clique em 3 cartas para selecioná-las, depois clique em "Revelar Cartas" para ver sua leitura.</p>
+        <div class="title-container">
+            <div class="title-glow"></div>
+            <h1 class="floating">Tarot Místico</h1>
         </div>
+        <p class="subtitle">Descubra os segredos que as cartas revelam</p>
+        <div class="instructions">
+            <p>Escolha 3 cartas para receber sua leitura personalizada. Cada carta revelará aspectos do seu passado, presente e futuro.</p>
+        </div>
+        
+        <div class="controls">
+            <button id="revealButton" disabled>
+                <i class="fas fa-eye"></i> Revelar Leitura
+            </button>
+            <button id="resetButton">
+                <i class="fas fa-redo"></i> Nova Leitura
+            </button>
+            <button class="music-control" id="musicToggle">
+                <i class="fas fa-volume-up"></i>
+            </button>
+        </div>
+        
+        <div class="counter" id="counter">Cartas selecionadas: <span id="selectedCount">0</span>/3</div>
     </header>
     
     <div class="tarot-container" id="tarotDeck">
@@ -226,14 +467,24 @@
         <!-- Cartas selecionadas aparecerão aqui -->
     </div>
     
-    <button id="revealButton" disabled>Revelar Cartas</button>
-    
     <div class="reading-result" id="readingResult">
-        <h2 class="reading-title">Sua Leitura de Tarot</h2>
+        <h2 class="reading-title"><i class="fas fa-crystal-ball"></i> Sua Leitura de Tarot</h2>
         <div id="interpretations">
             <!-- Interpretações das cartas aparecerão aqui -->
         </div>
     </div>
+
+    <audio id="backgroundMusic" loop>
+        <source src="https://assets.mixkit.co/music/preview/mixkit-mysterious-space-2812.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="cardFlipSound">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-magic-spell-389.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="revealSound">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-magical-wooden-harp-232.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
         // Dados das cartas de tarot
@@ -332,42 +583,68 @@
         const tarotDeck = document.getElementById('tarotDeck');
         const selectedCardsContainer = document.getElementById('selectedCards');
         const revealButton = document.getElementById('revealButton');
+        const resetButton = document.getElementById('resetButton');
+        const musicToggle = document.getElementById('musicToggle');
         const readingResult = document.getElementById('readingResult');
         const interpretationsContainer = document.getElementById('interpretations');
+        const selectedCount = document.getElementById('selectedCount');
+        const counter = document.getElementById('counter');
+        const starsContainer = document.getElementById('stars');
+        
+        // Elementos de áudio
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const cardFlipSound = document.getElementById('cardFlipSound');
+        const revealSound = document.getElementById('revealSound');
 
         // Estado do jogo
         let selectedCards = [];
         let revealedCards = [];
+        let isMusicPlaying = false;
 
         // Inicializar o jogo
         function initGame() {
+            createStars();
+            
             // Embaralhar as cartas
             const shuffledCards = [...tarotCards].sort(() => Math.random() - 0.5);
             
             // Criar elementos das cartas
             shuffledCards.forEach((card, index) => {
-                const cardElement = document.createElement('div');
-                cardElement.className = 'card';
-                cardElement.dataset.index = index;
-                
-                cardElement.innerHTML = `
-                    <div class="card-inner">
-                        <div class="card-front">
-                            <span>Tarot</span>
-                        </div>
-                        <div class="card-back">
-                            <div class="card-name">${card.name}</div>
-                            <div class="card-meaning">${card.meaning}</div>
-                        </div>
-                    </div>
-                `;
-                
-                cardElement.addEventListener('click', () => selectCard(cardElement, card));
+                const cardElement = createCardElement(card, index);
                 tarotDeck.appendChild(cardElement);
             });
             
-            // Configurar botão de revelar
+            // Configurar eventos
             revealButton.addEventListener('click', revealSelectedCards);
+            resetButton.addEventListener('click', resetGame);
+            musicToggle.addEventListener('click', toggleMusic);
+            
+            // Iniciar música
+            backgroundMusic.volume = 0.3;
+            toggleMusic();
+        }
+
+        // Criar elemento de carta
+        function createCardElement(card, index) {
+            const cardElement = document.createElement('div');
+            cardElement.className = 'card floating';
+            cardElement.dataset.index = index;
+            
+            cardElement.innerHTML = `
+                <div class="card-inner">
+                    <div class="card-front">
+                        <span>Tarot</span>
+                    </div>
+                    <div class="card-back">
+                        <div class="card-name">${card.name}</div>
+                        <div class="card-meaning">${card.meaning}</div>
+                    </div>
+                </div>
+                <div class="card-glow"></div>
+            `;
+            
+            cardElement.addEventListener('click', () => selectCard(cardElement, card));
+            return cardElement;
         }
 
         // Selecionar uma carta
@@ -377,42 +654,46 @@
                 return;
             }
             
+            // Tocar som de virar carta
+            cardFlipSound.currentTime = 0;
+            cardFlipSound.play();
+            
+            // Virar a carta
+            cardElement.classList.add('flipped');
+            
             // Adicionar à lista de selecionadas
             selectedCards.push(cardElement);
             
             // Criar uma cópia da carta para a área de selecionadas
             const selectedCardElement = document.createElement('div');
-            selectedCardElement.className = 'selected-card';
+            selectedCardElement.className = 'selected-card pulse';
             selectedCardElement.innerHTML = cardElement.innerHTML;
             selectedCardsContainer.appendChild(selectedCardElement);
             
             // Adicionar dados da carta ao array de cartas reveladas
             revealedCards.push(card);
             
+            // Atualizar contador
+            selectedCount.textContent = selectedCards.length;
+            
             // Atualizar estado do botão
             if (selectedCards.length === 3) {
                 revealButton.disabled = false;
+                counter.classList.add('pulse');
             }
         }
 
         // Revelar as cartas selecionadas
         function revealSelectedCards() {
-            // Virar as cartas selecionadas
-            selectedCards.forEach(card => {
-                card.classList.add('flipped');
-            });
-            
-            // Virar as cópias na área de selecionadas
-            const selectedCardElements = selectedCardsContainer.querySelectorAll('.selected-card');
-            selectedCardElements.forEach(card => {
-                card.classList.add('flipped');
-            });
+            // Tocar som de revelação
+            revealSound.play();
             
             // Mostrar a interpretação
             showReading();
             
             // Desabilitar o botão
             revealButton.disabled = true;
+            counter.classList.remove('pulse');
         }
 
         // Mostrar a leitura
@@ -423,11 +704,12 @@
             // Adicionar interpretações para cada carta
             revealedCards.forEach((card, index) => {
                 const position = ['Passado', 'Presente', 'Futuro'][index];
+                const icons = ['fas fa-history', 'fas fa-clock', 'fas fa-hourglass-end'];
                 
                 const interpretationElement = document.createElement('div');
                 interpretationElement.className = 'card-interpretation';
                 interpretationElement.innerHTML = `
-                    <h3>${position}: ${card.name}</h3>
+                    <h3><i class="${icons[index]}"></i> ${position}: ${card.name}</h3>
                     <p>${card.meaning}</p>
                 `;
                 
@@ -439,6 +721,65 @@
             
             // Rolar para o resultado
             readingResult.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Reiniciar o jogo
+        function resetGame() {
+            // Limpar seleções
+            selectedCards = [];
+            revealedCards = [];
+            
+            // Limpar containers
+            selectedCardsContainer.innerHTML = '';
+            interpretationsContainer.innerHTML = '';
+            readingResult.style.display = 'none';
+            
+            // Resetar cartas
+            const allCards = tarotDeck.querySelectorAll('.card');
+            allCards.forEach(card => {
+                card.classList.remove('flipped');
+            });
+            
+            // Resetar contador e botão
+            selectedCount.textContent = '0';
+            revealButton.disabled = true;
+            counter.classList.remove('pulse');
+            
+            // Embaralhar novamente
+            const cardElements = Array.from(tarotDeck.children);
+            cardElements.sort(() => Math.random() - 0.5);
+            cardElements.forEach(card => tarotDeck.appendChild(card));
+        }
+
+        // Controlar música
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                backgroundMusic.pause();
+                musicToggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else {
+                backgroundMusic.play();
+                musicToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        // Criar estrelas de fundo
+        function createStars() {
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const size = Math.random() * 3;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                
+                starsContainer.appendChild(star);
+            }
         }
 
         // Iniciar o jogo quando a página carregar
